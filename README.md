@@ -67,4 +67,4 @@ ok      github.com/heshed/benchmark-go-json     17.796s
 Due to its usability, it was excluded from the test.
 - https://github.com/mailru/easyjson 
 
-fastjson, gjson didn't provide unmarshaling functionality, so it only did parsing.
+~fastjson, gjson didn't provide unmarshaling functionality, so it only did parsing.~
