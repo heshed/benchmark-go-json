@@ -39,6 +39,7 @@ Intel(R) Core(TM) i9-9980HK CPU @ 2.40GHz
 ## usage
 
 ```console
+# go version go1.15 darwin/amd64
 go test bench=.
 ```
 
