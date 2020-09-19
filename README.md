@@ -9,15 +9,15 @@ benchmark-go-json
 
 ## json libraries (2020-09)
 
-- standard json.Decoder
-- standard json.Unmarshal
+- [standard json.Decoder](https://golang.org/pkg/encoding/json/#Decoder)
+- [standard json.Unmarshal](https://golang.org/pkg/encoding/json/#Unmarshal)
 - :star2: 8.2k https://github.com/json-iterator/go
-- :star2: 2.7k https://github.com/pquerna/ffjson/ffjson
+- :star2: 2.7k https://github.com/pquerna/ffjson
 - :star2: 7k https://github.com/tidwall/gjson
 - :star2: 1.5k https://github.com/ugorji/go
 - :star2: 1k https://github.com/valyala/fastjson
 - :star2: 6.1k https://github.com/aws/aws-sdk-go
-- .. and my `DecodeJson()` function :)
+- .. and my [`DecodeJson()`][DecodeJson] function :)
 
 ## machine environment
 
@@ -68,3 +68,5 @@ Due to its usability, it was excluded from the test.
 - https://github.com/mailru/easyjson 
 
 ~fastjson, gjson didn't provide unmarshaling functionality, so it only did parsing.~
+
+[DecodeJson]: https://github.com/heshed/benchmark-go-json/blob/master/benchmark_test.go#L49-L55
