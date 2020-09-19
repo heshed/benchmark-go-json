@@ -16,7 +16,7 @@ benchmark-go-json
 - :star2: 7k https://github.com/tidwall/gjson
 - :star2: 1.5k https://github.com/ugorji/go
 - :star2: 1k https://github.com/valyala/fastjson
-- :star2: 6.1k https//github.com/aws/aws-sdk-go
+- :star2: 6.1k https://github.com/aws/aws-sdk-go
 - .. and my `DecodeJson()` function :)
 
 ## machine environment
