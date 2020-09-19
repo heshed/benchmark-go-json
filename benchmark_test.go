@@ -35,7 +35,7 @@ type oauthProvider struct {
 	ExpireTime string `json:"expire_time"`
 }
 
-type linkdedAccount struct {
+type linkedAccount struct {
 	Code     int             `json:"code"`
 	Message  string          `json:"message"`
 	Response []oauthProvider `json:"response"`
@@ -56,7 +56,7 @@ func DecodeJson(r io.Reader, v interface{}) (interface{}, error) {
 
 func BenchmarkDecodeJson(b *testing.B) {
 	b.ReportAllocs()
-	var out linkdedAccount
+	var out linkedAccount
 	for i := 0; i < b.N; i++ {
 		DecodeJson(input, out)
 	}
@@ -65,7 +65,7 @@ func BenchmarkDecodeJson(b *testing.B) {
 // https://github.com/aws/aws-sdk-go
 func BenchmarkAWSJsonSDK(b *testing.B) {
 	b.ReportAllocs()
-	var out linkdedAccount
+	var out linkedAccount
 	for i := 0; i < b.N; i++ {
 		jsonutil.UnmarshalJSON(&out, input)
 	}
@@ -74,7 +74,7 @@ func BenchmarkAWSJsonSDK(b *testing.B) {
 // standard json unmarshal
 func BenchmarkStdJsonUnmarshal(b *testing.B) {
 	b.ReportAllocs()
-	var out linkdedAccount
+	var out linkedAccount
 	for i := 0; i < b.N; i++ {
 		json.Unmarshal(inputByte.Bytes(), &out)
 	}
@@ -83,24 +83,45 @@ func BenchmarkStdJsonUnmarshal(b *testing.B) {
 // standard json decoder
 func BenchmarkStdJsonDecode(b *testing.B) {
 	b.ReportAllocs()
-	var out linkdedAccount
+	var out linkedAccount
 	for i := 0; i < b.N; i++ {
 		json.NewDecoder(input).Decode(&out)
 	}
 }
 
 // https://github.com/valyala/fastjson
-func BenchmarkFastJsonJustParsing(b *testing.B) {
+func BenchmarkFastJsonParseAndUnmarshal(b *testing.B) {
 	b.ReportAllocs()
+	out := linkedAccount{Response: []oauthProvider{}}
 	for i := 0; i < b.N; i++ {
-		fastjson.Parse(inputByte.String())
+		v, _ := fastjson.Parse(inputByte.String())
+		out.Code = v.GetInt("code")
+		out.Message = string(v.GetStringBytes("message"))
+		for _, arr := range v.GetArray("response") {
+			out.Response = append(out.Response, oauthProvider{
+				Provider:   string(arr.GetStringBytes("provider")),
+				Token:      string(arr.GetStringBytes("token")),
+				ExpireTime: string(arr.GetStringBytes("expiry_time")),
+			})
+		}
 	}
 }
 
 // https://github.com/tidwall/gjson/
-func BenchmarkGjsonJustParsing(b *testing.B) {
+func BenchmarkGjsonUnmarshal(b *testing.B) {
 	b.ReportAllocs()
+	out := linkedAccount{Response: []oauthProvider{}}
 	for i := 0; i < b.N; i++ {
+		results := gjson.GetMany(inputByte.String(), "code", "message", "response")
+		out.Code = int(results[0].Int())
+		out.Message = results[1].String()
+		for _, o := range results[2].Array() {
+			out.Response = append(out.Response, oauthProvider{
+				Provider:   o.Get("provider").String(),
+				Token:      o.Get("token").String(),
+				ExpireTime: o.Get("expiry_time").String(),
+			})
+		}
 		gjson.ParseBytes(inputByte.Bytes())
 	}
 }
@@ -109,7 +130,7 @@ func BenchmarkGjsonJustParsing(b *testing.B) {
 func BenchmarkJsonIteratorUnmarshal(b *testing.B) {
 	b.ReportAllocs()
 	var json = jsoniter.ConfigCompatibleWithStandardLibrary
-	var out linkdedAccount
+	var out linkedAccount
 	for i := 0; i < b.N; i++ {
 		json.Unmarshal(inputByte.Bytes(), &out)
 	}
@@ -119,7 +140,7 @@ func BenchmarkJsonIteratorUnmarshal(b *testing.B) {
 func BenchmarkJsonIteratorDecode(b *testing.B) {
 	b.ReportAllocs()
 	var json = jsoniter.ConfigCompatibleWithStandardLibrary
-	var out linkdedAccount
+	var out linkedAccount
 	for i := 0; i < b.N; i++ {
 		json.NewDecoder(input).Decode(&out)
 	}
@@ -128,7 +149,7 @@ func BenchmarkJsonIteratorDecode(b *testing.B) {
 // https://github.com/pquerna/ffjson
 func BenchmarkJsonFFJsonUnmarshal(b *testing.B) {
 	b.ReportAllocs()
-	var out linkdedAccount
+	var out linkedAccount
 	for i := 0; i < b.N; i++ {
 		ffjson.Unmarshal(inputByte.Bytes(), &out)
 	}
@@ -137,25 +158,16 @@ func BenchmarkJsonFFJsonUnmarshal(b *testing.B) {
 // https://github.com/pquerna/ffjson
 func BenchmarkJsonFFJsonDecodeReader(b *testing.B) {
 	b.ReportAllocs()
-	var out linkdedAccount
+	var out linkedAccount
 	for i := 0; i < b.N; i++ {
 		ffjson.NewDecoder().DecodeReader(input, &out)
 	}
 }
 
 // https://github.com/pquerna/ffjson
-func BenchmarkJsonFFJsonDecodeFast(b *testing.B) {
-	b.ReportAllocs()
-	var out linkdedAccount
-	for i := 0; i < b.N; i++ {
-		ffjson.NewDecoder().DecodeFast(inputByte.Bytes(), &out)
-	}
-}
-
-// https://github.com/pquerna/ffjson
 func BenchmarkJsonFFJsonDecode(b *testing.B) {
 	b.ReportAllocs()
-	var out linkdedAccount
+	var out linkedAccount
 	for i := 0; i < b.N; i++ {
 		ffjson.NewDecoder().Decode(inputByte.Bytes(), &out)
 	}
@@ -164,7 +176,7 @@ func BenchmarkJsonFFJsonDecode(b *testing.B) {
 // https://github.com/ugorji/go
 func BenchmarkUgorjiJsonCodec(b *testing.B) {
 	b.ReportAllocs()
-	var out linkdedAccount
+	var out linkedAccount
 	for i := 0; i < b.N; i++ {
 		codec.NewDecoder(input, &codec.JsonHandle{}).Decode(&out)
 	}

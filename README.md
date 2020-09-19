@@ -47,24 +47,19 @@ go test bench=.
 
 ```
 ➜  benchmark-go-json git:(master) ✗ go test -bench=. 
-goos: darwin
-goarch: amd64
-pkg: github.com/heshed/benchmark-go-json
-BenchmarkDecodeJson-16                   2746500               435 ns/op            1008 B/op          5 allocs/op
-BenchmarkAWSJsonSDK-16                   4326685               278 ns/op             880 B/op          3 allocs/op
-BenchmarkStdJsonUnmarshal-16              681595              1755 ns/op             304 B/op          9 allocs/op
-BenchmarkStdJsonDecode-16                4951611               238 ns/op             864 B/op          2 allocs/op
-BenchmarkFastJsonJustParsing-16           816799              1369 ns/op            1752 B/op         13 allocs/op
-BenchmarkGjsonJustParsing-16            27170618                43.9 ns/op            96 B/op          1 allocs/op
-BenchmarkJsonIteratorUnmarshal-16        3308511               354 ns/op              16 B/op          2 allocs/op
-BenchmarkJsonIteratorDecode-16           5238150               206 ns/op             664 B/op          3 allocs/op
-BenchmarkJsonFFJsonUnmarshal-16           662472              1679 ns/op             304 B/op          9 allocs/op
-BenchmarkJsonFFJsonDecodeReader-16       4692634               250 ns/op             864 B/op          2 allocs/op
-BenchmarkJsonFFJsonDecodeFast-16        12783390                88.4 ns/op            80 B/op          2 allocs/op
-BenchmarkJsonFFJsonDecode-16              703741              1780 ns/op             304 B/op          9 allocs/op
-BenchmarkUgorjiJsonCodec-16              1000000              1187 ns/op            1088 B/op          4 allocs/op
-PASS
-ok      github.com/heshed/benchmark-go-json     17.576s
+BenchmarkJsonIteratorDecode-16                   5480703               216 ns/op             664 B/op          3 allocs/op
+BenchmarkStdJsonDecode-16                        5088841               234 ns/op             864 B/op          2 allocs/op
+BenchmarkJsonFFJsonDecodeReader-16               4593306               248 ns/op             864 B/op          2 allocs/op
+BenchmarkAWSJsonSDK-16                           4017230               282 ns/op             880 B/op          3 allocs/op
+BenchmarkJsonIteratorUnmarshal-16                3103564               357 ns/op              16 B/op          2 allocs/op
+BenchmarkDecodeJson-16                           2826174               445 ns/op            1008 B/op          5 allocs/op
+BenchmarkGjsonUnmarshal-16                       1231782              1007 ns/op             687 B/op          4 allocs/op
+BenchmarkUgorjiJsonCodec-16                      1000000              1218 ns/op            1088 B/op          4 allocs/op
+BenchmarkJsonFFJsonDecode-16                      682381              1731 ns/op             304 B/op          9 allocs/op
+BenchmarkStdJsonUnmarshal-16                      710850              1737 ns/op             304 B/op          9 allocs/op
+BenchmarkJsonFFJsonUnmarshal-16                   699499              1772 ns/op             304 B/op          9 allocs/op
+BenchmarkFastJsonParseAndUnmarshal-16             643364              1888 ns/op            2018 B/op         15 allocs/op
+ok      github.com/heshed/benchmark-go-json     17.796s
 ```
 
 ## Considerations

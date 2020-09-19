@@ -9,4 +9,5 @@ require (
 	github.com/tidwall/gjson v1.6.1
 	github.com/ugorji/go/codec v1.1.8
 	github.com/valyala/fastjson v1.6.1
+	golang.org/x/net v0.0.0-20200822124328-c89045814202 // indirect
 )
